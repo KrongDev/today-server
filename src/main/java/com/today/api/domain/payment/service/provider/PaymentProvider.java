@@ -1,6 +1,5 @@
 package com.today.api.domain.payment.service.provider;
 
-import com.today.api.domain.user.entity.UserEntity;
 
 public interface PaymentProvider {
     boolean validatePayment(String paymentKey, String orderId, java.math.BigDecimal amount);

@@ -1,11 +1,12 @@
-package com.today.api.domain.payment.entity;
+package com.today.api.domain.payment.infrastructure.entity;
 
-import com.today.api.domain.payment.model.PaymentHistory;
-import com.today.api.domain.user.entity.UserEntity;
+import com.today.api.domain.payment.domain.model.PaymentHistory;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter(AccessLevel.PACKAGE)
 @Table(name = "payment_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
@@ -23,9 +25,8 @@ public class PaymentHistoryEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @Column(name = "order_id", nullable = false)
     private String orderId;
@@ -48,33 +49,18 @@ public class PaymentHistoryEntity {
     @Column(name = "paid_at", nullable = false, updatable = false)
     private LocalDateTime paidAt;
 
-    public PaymentHistoryEntity(UserEntity user, String orderId, String paymentKey, BigDecimal amount,
-            PaymentType paymentType, PaymentStatus status) {
-        this.user = user;
-        this.orderId = orderId;
-        this.paymentKey = paymentKey;
-        this.amount = amount;
-        this.paymentType = paymentType;
-        this.status = status;
-    }
-
     // Constructor: Domain Model -> Entity
-    public PaymentHistoryEntity(PaymentHistory paymentHistory, UserEntity user) {
-        this.id = paymentHistory.getId();
-        this.user = user;
-        this.orderId = paymentHistory.getOrderId();
-        this.paymentKey = paymentHistory.getPaymentKey();
-        this.amount = paymentHistory.getAmount();
+    public PaymentHistoryEntity(PaymentHistory paymentHistory) {
+        BeanUtils.copyProperties(paymentHistory, this);
         this.paymentType = PaymentType.valueOf(paymentHistory.getPaymentType().name());
         this.status = PaymentStatus.valueOf(paymentHistory.getStatus().name());
-        this.paidAt = paymentHistory.getPaidAt();
     }
 
     // Method: Entity -> Domain Model
     public PaymentHistory toDomain() {
         return new PaymentHistory(
                 this.id,
-                this.user.getId(),
+                this.userId,
                 this.orderId,
                 this.paymentKey,
                 this.amount,
