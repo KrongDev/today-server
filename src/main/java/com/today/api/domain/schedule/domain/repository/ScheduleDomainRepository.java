@@ -1,6 +1,6 @@
-package com.today.api.domain.schedule.repository;
+package com.today.api.domain.schedule.domain.repository;
 
-import com.today.api.domain.schedule.model.Schedule;
+import com.today.api.domain.schedule.domain.model.Schedule;
 
 import java.time.LocalDateTime;
 import java.util.List;

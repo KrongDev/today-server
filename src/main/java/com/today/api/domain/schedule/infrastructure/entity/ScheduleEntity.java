@@ -1,9 +1,12 @@
-package com.today.api.domain.schedule.entity;
+package com.today.api.domain.schedule.infrastructure.entity;
 
+import com.today.api.domain.schedule.domain.model.Schedule;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter(AccessLevel.PACKAGE)
 @Table(name = "schedules")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
@@ -53,20 +57,13 @@ public class ScheduleEntity {
     }
 
     // Constructor: Domain Model -> Entity
-    public ScheduleEntity(com.today.api.domain.schedule.model.Schedule schedule) {
-        this.id = schedule.getId();
-        this.title = schedule.getTitle();
-        this.details = schedule.getDetails();
-        this.location = schedule.getLocation();
-        this.startTime = schedule.getStartTime();
-        this.endTime = schedule.getEndTime();
-        this.createdAt = schedule.getCreatedAt();
-        this.updatedAt = schedule.getUpdatedAt();
+    public ScheduleEntity(Schedule schedule) {
+        BeanUtils.copyProperties(schedule, this);
     }
 
     // Method: Entity -> Domain Model
-    public com.today.api.domain.schedule.model.Schedule toDomain() {
-        return new com.today.api.domain.schedule.model.Schedule(
+    public Schedule toDomain() {
+        return new Schedule(
                 this.id,
                 this.title,
                 this.details,
@@ -75,22 +72,5 @@ public class ScheduleEntity {
                 this.endTime,
                 this.createdAt,
                 this.updatedAt);
-    }
-
-    // Business methods (kept for backward compatibility, but should delegate to
-    // domain)
-    public void updateSchedule(String title, String details, String location, LocalDateTime startTime,
-            LocalDateTime endTime) {
-        if (title != null && !title.isBlank()) {
-            this.title = title;
-        }
-        this.details = details;
-        this.location = location;
-        if (startTime != null) {
-            this.startTime = startTime;
-        }
-        if (endTime != null) {
-            this.endTime = endTime;
-        }
     }
 }

@@ -1,10 +1,12 @@
-package com.today.api.domain.schedule.model;
+package com.today.api.domain.schedule.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class Schedule {
     private final Long id;
     private String title;
@@ -15,20 +17,7 @@ public class Schedule {
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Schedule(Long id, String title, String details, String location,
-            LocalDateTime startTime, LocalDateTime endTime,
-            LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.details = details;
-        this.location = location;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    // Factory method for creating new schedules
+    // Factory method
     public static Schedule create(String title, String details, String location,
             LocalDateTime startTime, LocalDateTime endTime) {
         LocalDateTime now = LocalDateTime.now();

@@ -1,9 +1,9 @@
 package com.today.api.domain.schedule.infrastructure;
 
-import com.today.api.domain.schedule.entity.ScheduleEntity;
-import com.today.api.domain.schedule.model.Schedule;
-import com.today.api.domain.schedule.repository.ScheduleDomainRepository;
-import com.today.api.domain.schedule.repository.ScheduleJpaRepository;
+import com.today.api.domain.schedule.domain.model.Schedule;
+import com.today.api.domain.schedule.domain.repository.ScheduleDomainRepository;
+import com.today.api.domain.schedule.domain.repository.ScheduleJpaRepository;
+import com.today.api.domain.schedule.infrastructure.entity.ScheduleEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -20,14 +20,8 @@ public class ScheduleRepositoryImpl implements ScheduleDomainRepository {
 
     @Override
     public Schedule save(Schedule schedule) {
-        // Domain -> Entity
         ScheduleEntity entity = new ScheduleEntity(schedule);
-
-        // Save
-        ScheduleEntity savedEntity = scheduleJpaRepository.save(entity);
-
-        // Entity -> Domain
-        return savedEntity.toDomain();
+        return scheduleJpaRepository.save(entity).toDomain();
     }
 
     @Override
