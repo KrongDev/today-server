@@ -1,5 +1,6 @@
 package com.today.api.domain.payment.entity;
 
+import com.today.api.domain.payment.model.PaymentHistory;
 import com.today.api.domain.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -58,7 +59,7 @@ public class PaymentHistoryEntity {
     }
 
     // Constructor: Domain Model -> Entity
-    public PaymentHistoryEntity(com.today.api.domain.payment.model.PaymentHistory paymentHistory, UserEntity user) {
+    public PaymentHistoryEntity(PaymentHistory paymentHistory, UserEntity user) {
         this.id = paymentHistory.getId();
         this.user = user;
         this.orderId = paymentHistory.getOrderId();
@@ -70,15 +71,15 @@ public class PaymentHistoryEntity {
     }
 
     // Method: Entity -> Domain Model
-    public com.today.api.domain.payment.model.PaymentHistory toDomain() {
-        return new com.today.api.domain.payment.model.PaymentHistory(
+    public PaymentHistory toDomain() {
+        return new PaymentHistory(
                 this.id,
                 this.user.getId(),
                 this.orderId,
                 this.paymentKey,
                 this.amount,
-                com.today.api.domain.payment.model.PaymentHistory.PaymentType.valueOf(this.paymentType.name()),
-                com.today.api.domain.payment.model.PaymentHistory.PaymentStatus.valueOf(this.status.name()),
+                PaymentHistory.PaymentType.valueOf(this.paymentType.name()),
+                PaymentHistory.PaymentStatus.valueOf(this.status.name()),
                 this.paidAt);
     }
 

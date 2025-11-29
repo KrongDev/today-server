@@ -1,6 +1,7 @@
 package com.today.api.domain.payment.service;
 
 import com.today.api.domain.payment.dto.*;
+import com.today.api.domain.payment.entity.PaymentHistoryEntity;
 import com.today.api.domain.payment.model.PaymentHistory;
 import com.today.api.domain.payment.model.Subscription;
 import com.today.api.domain.payment.repository.PaymentHistoryRepository;
@@ -45,7 +46,7 @@ public class PaymentService {
                 PaymentHistory.PaymentType.GENERAL,
                 PaymentHistory.PaymentStatus.SUCCESS,
                 null);
-        paymentHistoryRepository.save(history);
+        paymentHistoryRepository.save(new PaymentHistoryEntity(history, user));
 
         return new PaymentResponse(
                 history.getId(),
@@ -54,14 +55,15 @@ public class PaymentService {
     }
 
     public List<PaymentHistoryResponse> getPaymentHistory(Long userId) {
-        return paymentHistoryRepository.findAllByUserIdOrderByCreatedAtDesc(userId).stream()
-                .map(this::toPaymentHistoryResponse)
+        return paymentHistoryRepository.findAllByUserIdOrderByPaidAtDesc(userId).stream()
+                .map(entity -> new PaymentHistoryResponse(entity.toDomain()))
                 .collect(Collectors.toList());
     }
 
     public SubscriptionResponse getSubscription(Long userId) {
         Subscription subscription = subscriptionRepository.findByUserId(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Subscription not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Subscription not found"))
+                .toDomain();
         return toSubscriptionResponse(subscription);
     }
 

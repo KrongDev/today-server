@@ -19,12 +19,14 @@ public class PaymentHistory {
     public PaymentHistory(Long id, Long userId, String orderId, String paymentKey,
             BigDecimal amount, PaymentType paymentType, PaymentStatus status,
             LocalDateTime paidAt) {
+        this.id = id;
         this.userId = userId;
         this.orderId = orderId;
         this.paymentKey = paymentKey;
         this.amount = amount;
         this.paymentType = paymentType;
         this.status = status;
+        this.paidAt = paidAt;
     }
 
     // Factory method

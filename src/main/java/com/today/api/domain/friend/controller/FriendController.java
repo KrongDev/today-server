@@ -1,11 +1,13 @@
 package com.today.api.domain.friend.controller;
 
-import com.today.api.domain.friend.dto.*;
+import com.today.api.domain.friend.dto.AddFriendRequest;
+import com.today.api.domain.friend.dto.FriendResponse;
+import com.today.api.domain.friend.dto.SendFriendRequest;
 import com.today.api.domain.friend.service.FriendService;
+import com.today.api.global.security.oauth2.user.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,44 +21,39 @@ public class FriendController {
 
     @PostMapping
     public ResponseEntity<FriendResponse> addFriend(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserPrincipal userDetails,
             @RequestBody AddFriendRequest request) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        return ResponseEntity.ok(friendService.addFriend(userId, request));
+        return ResponseEntity.ok(friendService.addFriend(userDetails.getId(), request));
     }
 
     @GetMapping
     public ResponseEntity<List<FriendResponse>> getFriends(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        return ResponseEntity.ok(friendService.getFriends(userId));
+            @AuthenticationPrincipal UserPrincipal userDetails) {
+        return ResponseEntity.ok(friendService.getFriends(userDetails.getId()));
     }
 
     @DeleteMapping("/{friendId}")
     public ResponseEntity<Void> removeFriend(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserPrincipal userDetails,
             @PathVariable Long friendId) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        friendService.removeFriend(userId, friendId);
+        friendService.removeFriend(userDetails.getId(), friendId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/requests")
     public ResponseEntity<Void> sendFriendRequest(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserPrincipal userDetails,
             @RequestBody SendFriendRequest request) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        friendService.sendFriendRequest(userId, request);
+        friendService.sendFriendRequest(userDetails.getId(), request);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/requests/{requestId}/respond")
     public ResponseEntity<Void> respondToFriendRequest(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal UserPrincipal userDetails,
             @PathVariable Long requestId,
             @RequestParam String status) {
-        Long userId = Long.parseLong(userDetails.getUsername());
-        friendService.respondToFriendRequest(userId, requestId, status);
+        friendService.respondToFriendRequest(userDetails.getId(), requestId, status);
         return ResponseEntity.ok().build();
     }
 }

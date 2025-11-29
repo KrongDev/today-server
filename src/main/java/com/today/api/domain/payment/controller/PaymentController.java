@@ -1,7 +1,6 @@
 package com.today.api.domain.payment.controller;
 
 import com.today.api.domain.payment.dto.MigrationData;
-import com.today.api.domain.payment.dto.PaymentDto;
 import com.today.api.domain.payment.dto.PaymentHistoryResponse;
 import com.today.api.domain.payment.dto.PaymentRequest;
 import com.today.api.domain.payment.dto.SubscriptionResponse;
