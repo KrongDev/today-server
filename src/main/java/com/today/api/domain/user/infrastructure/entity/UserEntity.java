@@ -1,9 +1,12 @@
-package com.today.api.domain.user.entity;
+package com.today.api.domain.user.infrastructure.entity;
 
+import com.today.api.domain.user.domain.model.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter(AccessLevel.PACKAGE)
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
@@ -52,20 +56,14 @@ public class UserEntity {
         this.email = email;
     }
 
-    public UserEntity(com.today.api.domain.user.model.User user) {
-        this.id = user.getId();
-        this.nickname = user.getNickname();
-        this.email = user.getEmail();
-        this.notificationSetting = user.isNotificationSetting();
-        this.isSubscriber = user.isSubscriber();
-        this.isDeactivated = user.isDeactivated();
-        this.createdAt = user.getCreatedAt();
-        this.updatedAt = user.getUpdatedAt();
-        this.deletedAt = user.getDeletedAt();
+    // Constructor: Domain Model -> Entity
+    public UserEntity(User user) {
+        BeanUtils.copyProperties(user, this);
     }
 
-    public com.today.api.domain.user.model.User toDomain() {
-        return new com.today.api.domain.user.model.User(
+    // Method: Entity -> Domain Model
+    public User toDomain() {
+        return new User(
                 this.id,
                 this.nickname,
                 this.email,
@@ -75,29 +73,5 @@ public class UserEntity {
                 this.createdAt,
                 this.updatedAt,
                 this.deletedAt);
-    }
-
-    // Business methods
-    public void updateNickname(String nickname) {
-        if (nickname != null && !nickname.isBlank()) {
-            this.nickname = nickname;
-        }
-    }
-
-    public void updateNotificationSetting(boolean notificationSetting) {
-        this.notificationSetting = notificationSetting;
-    }
-
-    public void deactivate() {
-        this.isDeactivated = true;
-        this.deletedAt = LocalDateTime.now();
-    }
-
-    public void subscribe() {
-        this.isSubscriber = true;
-    }
-
-    public void unsubscribe() {
-        this.isSubscriber = false;
     }
 }

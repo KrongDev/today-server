@@ -1,10 +1,13 @@
-package com.today.api.domain.user.model;
+package com.today.api.domain.user.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class User {
     private final Long id;
     private String nickname;
@@ -16,21 +19,7 @@ public class User {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public User(Long id, String nickname, String email, boolean notificationSetting, boolean isSubscriber,
-            boolean isDeactivated,
-            LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        this.id = id;
-        this.nickname = nickname;
-        this.email = email;
-        this.notificationSetting = notificationSetting;
-        this.isSubscriber = isSubscriber;
-        this.isDeactivated = isDeactivated;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
-    }
-
-    // Constructor for creating new users
+    // Factory method
     public static User create(String nickname, String email) {
         LocalDateTime now = LocalDateTime.now();
         return new User(null, nickname, email, true, false, false, now, now, null);
