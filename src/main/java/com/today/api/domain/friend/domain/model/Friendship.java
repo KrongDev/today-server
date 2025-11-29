@@ -1,5 +1,6 @@
-package com.today.api.domain.friend.model;
+package com.today.api.domain.friend.domain.model;
 
+import com.today.api.domain.friend.domain.model.vo.FriendshipStatus;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -60,9 +61,5 @@ public class Friendship {
             return this.requesterId;
         }
         throw new IllegalArgumentException("User is not part of this friendship");
-    }
-
-    public enum FriendshipStatus {
-        PENDING, ACCEPTED, BLOCKED
     }
 }

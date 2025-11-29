@@ -1,9 +1,10 @@
-package com.today.api.domain.friend.controller;
+package com.today.api.domain.friend.interfaces.controller;
 
-import com.today.api.domain.friend.dto.AddFriendRequest;
-import com.today.api.domain.friend.dto.FriendResponse;
-import com.today.api.domain.friend.dto.SendFriendRequest;
-import com.today.api.domain.friend.service.FriendService;
+import com.today.api.domain.friend.application.service.FriendShipFacade;
+import com.today.api.domain.friend.domain.model.vo.FriendshipStatus;
+import com.today.api.domain.friend.interfaces.dto.AddFriendRequest;
+import com.today.api.domain.friend.interfaces.dto.FriendResponse;
+import com.today.api.domain.friend.interfaces.dto.SendFriendRequest;
 import com.today.api.global.security.oauth2.user.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,26 +18,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FriendController {
 
-    private final FriendService friendService;
+    private final FriendShipFacade friendShipFacade;
 
     @PostMapping
     public ResponseEntity<FriendResponse> addFriend(
             @AuthenticationPrincipal UserPrincipal userDetails,
             @RequestBody AddFriendRequest request) {
-        return ResponseEntity.ok(friendService.addFriend(userDetails.getId(), request));
+        return ResponseEntity.ok(friendShipFacade.addFriend(userDetails.getId(), request));
     }
 
     @GetMapping
     public ResponseEntity<List<FriendResponse>> getFriends(
             @AuthenticationPrincipal UserPrincipal userDetails) {
-        return ResponseEntity.ok(friendService.getFriends(userDetails.getId()));
+        return ResponseEntity.ok(friendShipFacade.getFriends(userDetails.getId()));
     }
 
     @DeleteMapping("/{friendId}")
     public ResponseEntity<Void> removeFriend(
             @AuthenticationPrincipal UserPrincipal userDetails,
             @PathVariable Long friendId) {
-        friendService.removeFriend(userDetails.getId(), friendId);
+        friendShipFacade.removeFriend(userDetails.getId(), friendId);
         return ResponseEntity.ok().build();
     }
 
@@ -44,7 +45,7 @@ public class FriendController {
     public ResponseEntity<Void> sendFriendRequest(
             @AuthenticationPrincipal UserPrincipal userDetails,
             @RequestBody SendFriendRequest request) {
-        friendService.sendFriendRequest(userDetails.getId(), request);
+        friendShipFacade.sendFriendRequest(userDetails.getId(), request);
         return ResponseEntity.ok().build();
     }
 
@@ -52,8 +53,8 @@ public class FriendController {
     public ResponseEntity<Void> respondToFriendRequest(
             @AuthenticationPrincipal UserPrincipal userDetails,
             @PathVariable Long requestId,
-            @RequestParam String status) {
-        friendService.respondToFriendRequest(userDetails.getId(), requestId, status);
+            @RequestParam FriendshipStatus status) {
+        friendShipFacade.respondToFriendRequest(userDetails.getId(), requestId, status);
         return ResponseEntity.ok().build();
     }
 }

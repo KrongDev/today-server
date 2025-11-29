@@ -1,11 +1,10 @@
 package com.today.api.domain.friend.infrastructure;
 
-import com.today.api.domain.friend.entity.FriendshipEntity;
-import com.today.api.domain.friend.model.Friendship;
-import com.today.api.domain.friend.repository.FriendshipDomainRepository;
-import com.today.api.domain.friend.repository.FriendshipJpaRepository;
-import com.today.api.domain.user.entity.UserEntity;
-import com.today.api.domain.user.repository.UserJpaRepository;
+import com.today.api.domain.friend.domain.model.Friendship;
+import com.today.api.domain.friend.domain.model.vo.FriendshipStatus;
+import com.today.api.domain.friend.domain.repository.FriendshipDomainRepository;
+import com.today.api.domain.friend.domain.repository.FriendshipJpaRepository;
+import com.today.api.domain.friend.infrastructure.entity.FriendshipEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,26 +15,12 @@ import java.util.stream.Collectors;
 @Repository
 @RequiredArgsConstructor
 public class FriendshipRepositoryImpl implements FriendshipDomainRepository {
-
     private final FriendshipJpaRepository friendshipJpaRepository;
-    private final UserJpaRepository userJpaRepository;
 
     @Override
     public Friendship save(Friendship friendship) {
-        // Load UserEntities
-        UserEntity requester = userJpaRepository.findById(friendship.getRequesterId())
-                .orElseThrow(() -> new IllegalArgumentException("Requester not found"));
-        UserEntity receiver = userJpaRepository.findById(friendship.getReceiverId())
-                .orElseThrow(() -> new IllegalArgumentException("Receiver not found"));
-
-        // Domain -> Entity
-        FriendshipEntity entity = new FriendshipEntity(friendship, requester, receiver);
-
-        // Save
-        FriendshipEntity savedEntity = friendshipJpaRepository.save(entity);
-
-        // Entity -> Domain
-        return savedEntity.toDomain();
+        FriendshipEntity entity = new FriendshipEntity(friendship);
+        return friendshipJpaRepository.save(entity).toDomain();
     }
 
     @Override
@@ -51,8 +36,8 @@ public class FriendshipRepositoryImpl implements FriendshipDomainRepository {
     }
 
     @Override
-    public List<Friendship> findAllByUserId(Long userId) {
-        return friendshipJpaRepository.findAllByUserId(userId).stream()
+    public List<Friendship> findAllByUserIdAndStatus(Long userId, FriendshipStatus status) {
+        return friendshipJpaRepository.findAllByUserIdAndStatus(userId, status).stream()
                 .map(FriendshipEntity::toDomain)
                 .collect(Collectors.toList());
     }
