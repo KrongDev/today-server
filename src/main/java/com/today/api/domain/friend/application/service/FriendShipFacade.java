@@ -6,7 +6,7 @@ import com.today.api.domain.friend.domain.service.FriendService;
 import com.today.api.domain.friend.interfaces.dto.AddFriendRequest;
 import com.today.api.domain.friend.interfaces.dto.FriendResponse;
 import com.today.api.domain.friend.interfaces.dto.SendFriendRequest;
-import com.today.api.domain.user.service.UserService;
+import com.today.api.domain.user.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

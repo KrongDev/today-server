@@ -1,9 +1,7 @@
 package com.today.api.global.security.oauth2;
 
-import com.today.api.domain.user.entity.UserEntity;
-import com.today.api.domain.user.entity.UserAuthProvider;
-import com.today.api.domain.user.repository.UserAuthProviderRepository;
-import com.today.api.domain.user.repository.UserJpaRepository;
+import com.today.api.domain.user.domain.repository.UserJpaRepository;
+import com.today.api.domain.user.infrastructure.entity.UserEntity;
 import com.today.api.global.security.oauth2.user.GoogleOAuth2UserInfo;
 import com.today.api.global.security.oauth2.user.KakaoOAuth2UserInfo;
 import com.today.api.global.security.oauth2.user.OAuth2UserInfo;

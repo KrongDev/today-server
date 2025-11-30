@@ -1,6 +1,6 @@
 package com.today.api.global.security.oauth2.user;
 
-import com.today.api.domain.user.entity.UserEntity;
+import com.today.api.domain.user.infrastructure.entity.UserEntity;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
