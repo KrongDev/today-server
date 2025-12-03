@@ -33,6 +33,9 @@ public class ScheduleEntity {
 
     private String location;
 
+    @Column(name = "tag_id")
+    private Long tagId;
+
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 
@@ -47,11 +50,12 @@ public class ScheduleEntity {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    public ScheduleEntity(String title, String details, String location, LocalDateTime startTime,
+    public ScheduleEntity(String title, String details, String location, Long tagId, LocalDateTime startTime,
             LocalDateTime endTime) {
         this.title = title;
         this.details = details;
         this.location = location;
+        this.tagId = tagId;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -68,6 +72,7 @@ public class ScheduleEntity {
                 this.title,
                 this.details,
                 this.location,
+                this.tagId,
                 this.startTime,
                 this.endTime,
                 this.createdAt,

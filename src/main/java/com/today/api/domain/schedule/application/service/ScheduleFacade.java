@@ -26,6 +26,7 @@ public class ScheduleFacade {
                 request.title(),
                 request.details(),
                 request.location(),
+                request.tagId(),
                 request.startTime(),
                 request.endTime());
         return ScheduleResponse.from(schedule);
@@ -59,6 +60,7 @@ public class ScheduleFacade {
                 request.title(),
                 request.details(),
                 request.location(),
+                request.tagId(),
                 request.startTime(),
                 request.endTime());
         return ScheduleResponse.from(schedule);

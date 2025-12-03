@@ -22,10 +22,10 @@ public class ScheduleService {
     private final ScheduleParticipantJpaRepository participantRepository;
 
     @Transactional
-    public Schedule createSchedule(Long userId, String title, String details, String location,
+    public Schedule createSchedule(Long userId, String title, String details, String location, Long tagId,
             LocalDateTime startTime, LocalDateTime endTime) {
         // Create domain model
-        Schedule schedule = Schedule.create(title, details, location, startTime, endTime);
+        Schedule schedule = Schedule.create(title, details, location, tagId, startTime, endTime);
 
         // Save
         schedule = scheduleDomainRepository.save(schedule);
@@ -52,10 +52,10 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Schedule updateSchedule(Long scheduleId, String title, String details, String location,
+    public Schedule updateSchedule(Long scheduleId, String title, String details, String location, Long tagId,
             LocalDateTime startTime, LocalDateTime endTime) {
         Schedule schedule = getSchedule(scheduleId);
-        schedule.updateDetails(title, details, location, startTime, endTime);
+        schedule.updateDetails(title, details, location, tagId, startTime, endTime);
         return scheduleDomainRepository.save(schedule);
     }
 
